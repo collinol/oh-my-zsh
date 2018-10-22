@@ -1,3 +1,4 @@
+#!/usr/bin/zsh
 # Set ZSH_CACHE_DIR to the path where cache files should be created
 # or else we will use the default cache/
 if [[ -z "$ZSH_CACHE_DIR" ]]; then
@@ -31,11 +32,21 @@ fi
 
 # Load all of the config files in ~/oh-my-zsh that end in .zsh
 # TIP: Add files you don't want in git to .gitignore
-for config_file ($ZSH/lib/*.zsh); do
-  custom_config_file="${ZSH_CUSTOM}/lib/${config_file:t}"
-  [ -f "${custom_config_file}" ] && config_file=${custom_config_file}
-  source $config_file
-done
+if [[ -d ${ZSH:-${HOME}/.oh-my-zsh/} ]]
+then
+    for config_file ($ZSH/lib/*.zsh); do
+      custom_config_file="${ZSH_CUSTOM}/lib/${config_file:t}"
+      [ -f "${custom_config_file}" ] && config_file=${custom_config_file}
+      source $config_file
+    done
+else
+    mkdir -p ${ZSH:-${HOME}/.oh-my-zsh/}
+    for config_file ($ZSH/lib/*.zsh); do
+      custom_config_file="${ZSH_CUSTOM}/lib/${config_file:t}"
+      [ -f "${custom_config_file}" ] && config_file=${custom_config_file}
+      source $config_file
+    done
+fi
 
 
 is_plugin() {
